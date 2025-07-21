@@ -1,4 +1,9 @@
 #include <bits/stdc++.h>
+#ifdef _WIN32
+    #include <windows.h>
+#else
+    #include <unistd.h>
+#endif
 using namespace std;
 
 struct Point {
@@ -23,6 +28,24 @@ private:
     const string BLUE = "\033[34m";
     const string YELLOW = "\033[33m";  
     const string CYAN = "\033[36m";     
+    
+    // Clear screen function
+    void clearScreen() {
+        #ifdef _WIN32
+            system("cls");
+        #else
+            system("clear");
+        #endif
+    }
+    
+    // Simple delay function without using chrono/thread
+    void delay(int milliseconds = 1000) {
+        #ifdef _WIN32
+            Sleep(milliseconds);
+        #else
+            usleep(milliseconds * 1000); // usleep takes microseconds
+        #endif
+    }
     
 public:
     VacuumCleaner(int r, int c) : rows(r), cols(c), currentX(0), currentY(0), dirtCleaned(0) {
@@ -95,8 +118,10 @@ public:
         fillPolygon(triangle);
     }
     void displayRoom() {
-        cout << "\nRoom Layout:\n";
+        clearScreen(); // Clear screen for animation effect
+        cout << "\n=== VACUUM CLEANER SIMULATION ===\n";
         cout << "Legend: V=Vacuum, #=Obstacle, *=Dirt, .=Clean, o=Cleaned\n";
+        cout << "Current Position: (" << currentX << ", " << currentY << ") | Dirt Cleaned: " << dirtCleaned << "\n";
         
         // Top border
         cout << "+";
@@ -157,8 +182,14 @@ public:
         return x >= 0 && x < rows && y >= 0 && y < cols && room[x][y] != 2 && !visited[x][y];
     }   
     void clean() {
-        cout << "Vacuum cleaner starting at position (" << currentX << ", " << currentY << ")\n";
+        clearScreen();
+        cout << "=== VACUUM CLEANER STARTING ===\n";
+        cout << "Starting position: (" << currentX << ", " << currentY << ")\n";
+        cout << "Press Enter to begin animation...\n";
+        cin.get(); // Wait for user input
+        
         displayRoom(); 
+        delay(1500); // Show initial state
         
         // Check if starting position is valid
         if (room[currentX][currentY] == 2) {
@@ -167,34 +198,43 @@ public:
         }
         
         dfsClean(currentX, currentY);     
-        cout << "Cleaning complete! Total dirt cleaned: " << dirtCleaned << endl;
+        
+        clearScreen();
+        cout << "\n=== CLEANING COMPLETE! ===\n";
+        cout << "Total dirt cleaned: " << dirtCleaned << endl;
         cout << "Final room state:\n";
         displayRoom();
+        cout << "Animation finished. Press Enter to continue...\n";
+        cin.get();
     }
     void dfsClean(int x, int y) {
         visited[x][y] = true;
         
+        string action = "";
         if (room[x][y] == 1) {
-            cout << "Found dirt at (" << x << ", " << y << ") - Cleaning...\n";
+            action = "CLEANING DIRT";
             room[x][y] = 3; // Mark as cleaned area
             dirtCleaned++;
         } else if (room[x][y] == 0) {
-            cout << "Position (" << x << ", " << y << ") is already clean.\n";
+            action = "MOVING THROUGH";
             room[x][y] = 3; // Mark as visited clean area
         }
         
         currentX = x;
         currentY = y;
         
-        // Show current state after each move
-        displayRoomASCII();
+        // Show current state with animation
+        displayRoom();
+        if (!action.empty()) {
+            cout << "Action: " << action << " at position (" << x << ", " << y << ")\n";
+        }
+        delay(800); // Animation delay
         
         for (int i = 0; i < 4; i++) {
             int newX = x + dx[i];
             int newY = y + dy[i];
             
             if (canMoveTo(newX, newY)) {
-                cout << "Moving to position (" << newX << ", " << newY << ")\n";
                 dfsClean(newX, newY);
             }
         }
@@ -206,6 +246,7 @@ public:
                 if (room[i][j] == 1) total++;
             }
         }
+
         return total;
     }
     
@@ -233,6 +274,13 @@ public:
             currentY = y;
         }
     }
+    
+    bool hasObstacleAt(int x, int y) {
+        if (x >= 0 && x < rows && y >= 0 && y < cols) {
+            return room[x][y] == 2;
+        }
+        return false;
+    }
 };
 int main() {
     
@@ -254,11 +302,15 @@ int main() {
     cout << "Created triangular obstacle (corner furniture)\n";
     
     // Create individual obstacles (walls/pillars)
-    vacuum.setObstacle(1, 6);
+    vacuum.setObstacle(1, 5);
     vacuum.setObstacle(1, 7);
     vacuum.setObstacle(2, 6);
     vacuum.setObstacle(2, 7);
     cout << "Created wall obstacles\n";
+    
+    // Add an obstacle at (0,1) to test the warning condition
+    vacuum.setObstacle(0, 1);
+    cout << "Added test obstacle at (0,1)\n";
     
     // Create another triangular obstacle
     vacuum.createTriangularObstacle(5, 6, 6, 8, 7, 6);
@@ -272,6 +324,7 @@ int main() {
     vacuum.setDirt(3, 0);
     vacuum.setDirt(3, 8);
     vacuum.setDirt(4, 1);
+    vacuum.setDirt(4, 2);
     vacuum.setDirt(4, 9);
     vacuum.setDirt(5, 0);
     vacuum.setDirt(5, 2);
@@ -279,9 +332,15 @@ int main() {
     vacuum.setDirt(7, 0);
     vacuum.setDirt(7, 5);
     vacuum.setDirt(7, 9);
+   
     
     cout << "Initial dirt count: " << vacuum.getTotalDirt() << endl;
     cout << "Total obstacles: " << vacuum.getTotalObstacles() << endl;
+    
+    // Check if there's an obstacle at position (0,1)
+    if (vacuum.hasObstacleAt(0, 1)) {
+        cout << "\nWarning: Obstacle detected at position (0,1) - This may block initial movement!\n";
+    }
     
     cout << "\nStarting cleaning process...\n";
     vacuum.clean();   
