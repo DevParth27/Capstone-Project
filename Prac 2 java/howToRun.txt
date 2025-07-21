@@ -1,0 +1,3 @@
+cd "d:\normie\Capstone Project\Prac 2 java"
+javac -cp "lib/*;." -d . src/main/java/com/placement/model/*.java src/main/java/com/placement/util/*.java src/main/java/com/placement/ui/*.java
+java -cp "lib/*;." com.placement.ui.MainApp

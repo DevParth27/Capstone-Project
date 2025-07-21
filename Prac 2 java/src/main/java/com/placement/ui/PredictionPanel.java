@@ -106,7 +106,7 @@ public class PredictionPanel extends JPanel {
         predictionPanel.add(createPredictionCard("Predicted Placement %", 
                 String.format("%.1f%%", predictions.get("placementPercentage")), new Color(66, 134, 244)));
         predictionPanel.add(createPredictionCard("Avg Package Prediction", 
-                String.format("₹%.2f LPA", predictions.get("avgPackage")), new Color(76, 175, 80)));
+                String.format("Rs %.2f LPA", predictions.get("avgPackage")), new Color(76, 175, 80)));
         predictionPanel.add(createPredictionCard("Top Company Sector", 
                 (String) predictions.get("topSector"), new Color(255, 152, 0)));
         predictionPanel.add(createPredictionCard("Top Job Role", 
