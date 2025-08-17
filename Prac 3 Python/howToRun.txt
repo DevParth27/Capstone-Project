@@ -1,0 +1,35 @@
+cd "d:\normie\Capstone Project\Prac 3 Python"
+javac -d . DatasetHandler.java FeatureExtractor.java PhishingDetector.java PhishingDetectorPanel.java MainApp.java
+java com.phishing.MainApp
+
+
+## Algorithm Details
+The Java phishing detection project uses a rule-based approach for URL analysis, specifically:
+
+1. Feature Extraction : The main detection algorithm is implemented in the PhishingDetector.java file.
+2. The implementation uses Java's pattern matching and string processing to extract features from URLs.
+
+
+1.URL Analysis : The algorithm extracts various features from URLs such as length, special characters, and suspicious keywords.
+2.Scoring System : It calculates a phishing score based on weighted features extracted from the URL.
+3.Classification : URLs with scores above a threshold (0.6) are classified as phishing websites.
+4.Confidence Calculation : The algorithm provides a confidence score for each prediction.
+
+## Features Analyzed
+The algorithm analyzes multiple URL characteristics including:
+
+- URL length (longer URLs are more suspicious)
+- Special character counts (dots, hyphens, underscores, etc.)
+- Presence of suspicious keywords (secure, account, login, etc.)
+- IP address detection (URLs with IP addresses instead of domain names)
+- HTTPS usage (legitimate sites tend to use HTTPS)
+- Domain length and subdomain count
+
+## Implementation Structure
+The project is organized into several components:
+
+- PhishingDetector.java: Core detection logic and scoring system
+- FeatureExtractor.java: Utility for extracting URL features
+- DatasetHandler.java: Sample dataset management
+- PhishingDetectorPanel.java: User interface for URL checking
+- MainApp.java: Main application entry point
