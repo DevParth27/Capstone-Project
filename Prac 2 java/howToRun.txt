@@ -1,3 +1,26 @@
 cd "d:\normie\Capstone Project\Prac 2 java"
 javac -cp "lib/*;." -d . src/main/java/com/placement/model/*.java src/main/java/com/placement/util/*.java src/main/java/com/placement/ui/*.java
 java -cp "lib/*;." com.placement.ui.MainApp
+
+
+## Algorithm Details
+The Java placement prediction project uses a Linear Regression approach for prediction, specifically:
+
+1. Basic Linear Trend Prediction : The main prediction algorithm is implemented in the PredictionUtil.java file. 
+2. The implementation uses Java Streams API to process the data and make predictions based on historical placement data.
+
+
+1.Data Filtering : The algorithm first filters historical placement data by branch if specified.
+2.Trend Analysis : It calculates average package trends by grouping data by year and computing averages.
+3.Linear Prediction : The method predictLinearTrend() is used to predict future values based on historical trends.
+4.Statistical Analysis : The algorithm also identifies top sectors and job roles by frequency analysis using Java Streams' grouping and counting operations.
+
+## Dataset Used
+The algorithm works with the Placement_Data_Full_Class.csv dataset which contains student information including:
+
+- Academic performance (10th, 12th, degree percentages)
+- Educational background (board, stream)
+- Work experience
+- Specialization
+- MBA percentage
+- Placement status and salary
