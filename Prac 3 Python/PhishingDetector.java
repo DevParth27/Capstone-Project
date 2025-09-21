@@ -112,8 +112,8 @@ public class PhishingDetector {
         
         // URL length (longer URLs are more suspicious)
         double urlLength = features.get("url_length");
-        if (urlLength > 50) {
-            score += 0.15;
+        if (urlLength > 40) {
+            score += 0.1;
         }
         
         // Special characters (increased weight)
