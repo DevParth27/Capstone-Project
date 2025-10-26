@@ -4,3 +4,4 @@ Projects:
 3. Phishing Website Detection using ML using Java.
 4. Generate Bar code and qr code reader and perform reading using java
 5. Vizualize live stock price using ML
+6. Instagram Filters using Python using NLP
